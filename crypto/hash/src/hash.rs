@@ -1,8 +1,26 @@
 #[cfg(feature = "std")]
 use std::fmt;
 
+#[cfg(feature = "zk-compat")]
+use neptune::poseidon::Poseidon;
+
+#[cfg(feature = "zk-compat")]
+use neptune::poseidon::PoseidonConstants;
+
+#[cfg(feature = "zk-compat")]
+use neptune::poseidon::fr::Fr;
+
 #[derive(Clone, Default, PartialEq, Eq)]
+#[cfg(not(feature = "zk-compat"))]
 pub struct Hash([u8; 32]);
+
+#[derive(Clone, Default, PartialEq, Eq)]
+#[cfg(feature = "zk-compat")]
+pub struct Hash {
+    data: Fr,
+    is_mongometry: Bool,
+    is_branch: Bool,
+}
 
 impl Hash {
     #[must_use]

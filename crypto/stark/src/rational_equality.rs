@@ -8,7 +8,8 @@ impl RationalExpression {
     /// Probabilistic extrinsic equality check
     pub fn equals(&self, other: &Self) -> bool {
         // Random evaluation point, also serves as random seed for trace.
-        let x = random::<FieldElement>();
+        //let x = random::<FieldElement>();
+        let x = FieldElement::default();
         let trace = |column: usize, offset: isize| {
             let mut hasher = Keccak::v256();
             hasher.update(&x.as_montgomery().to_bytes_be());

@@ -10,9 +10,9 @@ use zkp_primefield::{fft::permute, Fft, FieldElement, Root, Zero};
 #[derive(Clone, PartialEq)]
 #[cfg_attr(feature = "std", derive(Debug))]
 pub struct TraceTable {
-    trace_length: usize,
-    num_columns:  usize,
-    values:       MmapVec<FieldElement>,
+    pub trace_length: usize,
+    pub num_columns:  usize,
+    pub values:       MmapVec<FieldElement>,
 }
 
 impl TraceTable {

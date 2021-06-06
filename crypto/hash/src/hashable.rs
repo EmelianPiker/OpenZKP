@@ -8,6 +8,19 @@ use crate::{hash::Hash, masked_keccak::MaskedKeccak};
 use zkp_primefield::FieldElement;
 use zkp_u256::U256;
 
+#[cfg(feature = "zk-compat")]
+use neptune::poseidon::Poseidon;
+#[cfg(feature = "zk-compat")]
+use neptune::poseidon::PoseidonConstants;
+
+#[cfg(feature = "zk-compat")]
+pub fn neptune_constants() -> PoseidonConstants
+{
+    use neptune::Strength::Strengthened;
+    let constants = PoseidonConstants::new_with_strength(Strengthened);
+    constants
+}
+
 pub trait Hashable {
     fn hash(&self) -> Hash;
 }
@@ -44,6 +57,8 @@ impl<T: Hashable> Hashable for &T {
 
 impl<T: Hashable> Hashable for &[T] {
     fn hash(&self) -> Hash {
+
+        #[cfg(not(feature = "zk-compat"))]
         if self.len() == 1 {
             // For a single element, return its hash.
             self[0].hash()
@@ -55,6 +70,15 @@ impl<T: Hashable> Hashable for &[T] {
             }
             hasher.hash()
         }
+
+        #[cfg(feature = "zk-compat")]
+        {
+            let constants = neptune_constants();
+            let mut h = Poseidon::new(&constants);
+            //h.set_preimage();
+            unimplemented!()
+        }
+
     }
 }
 
